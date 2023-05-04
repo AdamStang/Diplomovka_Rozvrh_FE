@@ -1,0 +1,61 @@
+<div class="rooms-container">
+  <div class="left-navigation">
+    <div class="header">
+      <div class="header-title">
+        <h2>Miestnosti</h2>
+  
+        <button mat-icon-button color="primary" 
+          *ngIf="rooms.length > 0"
+          (click)="openCreateRoomDialog()" 
+          matTooltip="Vytvoriť miestnosť">
+            <mat-icon>add_circle</mat-icon>
+        </button>
+      </div>
+      <input [formControl]="search" placeholder="Search" class="search">
+    </div>
+
+    <div class="items-list" *ngIf="!loading; else loadingTemp">
+      <ng-container *ngIf="filteredRooms.length > 0; else noRooms">
+        <div class="item-card" *ngFor="let room of filteredRooms" (click)="roomSelected(room)" [ngClass]="{'active': room.id == selectedRoom?.id}">
+          <div class="first-row">
+            <span class="item-name"> {{ room.name.toUpperCase() }} </span>
+            <span> {{ room.capacity }} miest </span>
+          </div>
+
+          <p class="room-type"> 
+            <span> {{ room.type }} </span> 
+            <span>
+              <!-- <mat-icon (click)="openDeleteDialog($event, room)">delete</mat-icon> -->
+            </span>
+          </p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="right-content" *ngIf="selectedRoom">
+    <ng-container *ngIf="!loadingTimetable; else loadingTTemp">
+      <div class="right-header">
+        <h2> {{ selectedRoom?.name }} </h2>
+        <div class="buttons">
+          <button mat-flat-button color="warn" (click)="openDeleteDialog($event)"> Vymazať miestnosť </button>
+        </div>
+      </div>
+
+      <app-timetable-template [timeslots]="timeslots" [isTemplate]="false">
+      </app-timetable-template>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loadingTemp>
+  <app-loading text="Miestnosti"></app-loading>
+</ng-template>
+
+<ng-template #loadingTTemp>
+  <app-loading text="Rozvrh pre miestnosť {{ selectedRoom?.name }}"></app-loading>
+</ng-template>
+
+<ng-template #noRooms>
+  <p>Nenašli sa žiadne miestnosti.</p>
+</ng-template>

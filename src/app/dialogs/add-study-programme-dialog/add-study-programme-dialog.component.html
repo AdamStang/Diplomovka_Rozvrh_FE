@@ -1,0 +1,29 @@
+<h2 mat-dialog-title class="dialog-header">Vytvoriť paralelku</h2>
+<mat-dialog-content>
+  <form class="create-study-programme-form" [formGroup]="myForm!!">
+    <mat-form-field appearance="outline">
+      <mat-label>Názov paralelky</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="myForm?.get('name')?.invalid">Názov je povinný</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Skratka paralelky</mat-label>
+      <input matInput formControlName="abbr">
+      <mat-error *ngIf="myForm?.get('abbr')?.invalid">Skratka je povinná</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Ročník</mat-label>
+      <input matInput type="number" formControlName="grade">
+      <mat-error *ngIf="myForm?.get('grade')?.invalid">Ročník je povinný</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Počet žiakov</mat-label>
+      <input type="number" matInput formControlName="numberOfStudents">
+      <mat-error *ngIf="myForm?.get('numberOfStudents')?.invalid">Počet žiakov je povinný</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Zrušiť</button>
+  <button mat-raised-button (click)="submit()" color="primary" cdkFocusInitial>Vytvoriť</button>
+</mat-dialog-actions>

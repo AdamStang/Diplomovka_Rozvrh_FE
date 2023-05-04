@@ -1,0 +1,35 @@
+<div class="home-container">
+  <!-- <div> -->
+    <div class="cards-container" *ngIf="!loadingStats; else loadingTemp">
+      <div class="stats-card">
+        <p class="card-name">Počet Miestností</p>
+        <p class="card-value"> {{ roomsCount }} </p>
+      </div>
+      <div class="stats-card">
+        <p class="card-name">Počet Katedier</p>
+        <p class="card-value"> {{ departmentsCount }} </p>
+      </div>
+      <div class="stats-card">
+        <p class="card-name">Počet Predmetov</p>
+        <p class="card-value"> {{ schoolSubjectsCount }} </p>
+      </div>
+      <div class="stats-card">
+        <p class="card-name">Počet Učiteľov</p>
+        <p class="card-value"> {{ teachersCount }} </p>
+      </div>
+    </div>
+    <button mat-fab color="primary" class="fab" (click)="openDialog()"><mat-icon>table_view</mat-icon></button>
+    <div class="template" *ngIf="!loadingTimetable; else loadingTimetableTemp">
+      <app-timetable-template [timeslots]="timeslots">
+      </app-timetable-template>
+    </div>
+  <!-- </div> -->
+</div>
+
+<ng-template #loadingTemp>
+  <app-loading text="dáta"></app-loading>
+</ng-template>
+
+<ng-template #loadingTimetableTemp>
+  <app-loading text="šablónu rozvrhu"></app-loading>
+</ng-template>

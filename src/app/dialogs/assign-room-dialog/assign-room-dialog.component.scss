@@ -1,0 +1,29 @@
+@import '../../../constants.scss';
+
+.dialog-header {
+    color: $PRIMARY_COLOR;
+}
+
+.assign-room-form {
+    display: grid;
+    grid-template-columns: 1fr;
+
+}
+
+.constraint {
+    height: 55px;
+}
+
+.room-option {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .first-row, .second-row {
+        width: 100%; 
+        display: flex;
+        line-height: 100%;
+        justify-content: space-between;
+    }
+}

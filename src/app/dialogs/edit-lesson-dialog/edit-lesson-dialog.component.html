@@ -1,0 +1,42 @@
+<h2 mat-dialog-title class="dialog-header">Upraviť hodinu</h2>
+<mat-dialog-content>
+  <p class="lesson"> {{ data?.lesson?.schoolSubject?.name }} - {{ data?.lesson?.name }} </p>
+  <form class="edit-lesson-form" [formGroup]="myForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Učiteľ</mat-label>
+      <mat-select formControlName="teacher" [disabled]="loading" [compareWith]="compareObjects">
+        <mat-option *ngFor="let teacher of data?.teachers" [value]="teacher">
+          {{ teacher?.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="myForm?.get('teacher')?.errors?.timeslotCollision">V tomto čase je daný učiteľ zaneprázdnený.</mat-error>
+      <mat-error *ngIf="myForm?.get('teacher')?.errors?.timeslotConstraints">V tomto čase daný učiteľ nechce učiť.</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Miestnosť</mat-label>
+      <mat-select formControlName="room" [disabled]="loading" [compareWith]="compareObjects">
+        <mat-option *ngFor="let room of data?.rooms" [value]="room">
+          {{ room?.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="myForm?.get('room')?.errors?.timeslotCollision">V tomto čase je daná miestnosť obsadená.</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Čas</mat-label>
+      <mat-select formControlName="timeslot" [disabled]="loading" [compareWith]="compareObjects">
+        <mat-option *ngFor="let timeslot of data?.timeslots" [value]="timeslot">
+          {{ timeslot?.day }} {{ timeslot?.startTime }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="myForm?.get('timeslot')?.errors?.timeslotCollision">V tomto čase je daný učiteľ zaneprázdnený.</mat-error>
+      <mat-error *ngIf="myForm?.get('timeslot')?.errors?.timeslotConstraints">V tomto čase daný učiteľ nechce učiť.</mat-error>
+    </mat-form-field>
+  </form>
+  <ng-container *ngIf="loading">
+    <app-loading text="nezrovnalosti"></app-loading>
+  </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Zrušiť</button>
+  <button mat-raised-button (click)="submit()" color="primary" [disabled]="loading" cdkFocusInitial>Vytvoriť</button>
+</mat-dialog-actions>

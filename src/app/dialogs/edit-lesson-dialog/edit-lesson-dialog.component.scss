@@ -1,0 +1,14 @@
+@import '../../../constants.scss';
+
+.dialog-header {
+    color: $PRIMARY_COLOR;
+}
+
+.lesson {
+    margin-bottom: 4px;
+}
+
+.edit-lesson-form {
+    display: grid;
+    grid-template-columns: 1fr;
+}

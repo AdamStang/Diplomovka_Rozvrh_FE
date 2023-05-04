@@ -1,0 +1,21 @@
+@import '../../../constants.scss';
+
+.dialog-header {
+    color: $PRIMARY_COLOR;
+}
+
+.create-subject-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 16px;
+}
+
+.lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 16px;
+}
+
+.grid-full-line {
+    grid-column: 1/-1;
+}

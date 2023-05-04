@@ -1,0 +1,65 @@
+<div class="teachers-container">
+  <div class="left-navigation">
+    <div class="header">
+      <div class="header-title">
+        <h2>Učitelia</h2>
+  
+        <button mat-icon-button color="primary" 
+          *ngIf="departments.length > 0 && teachers.length > 0"
+          (click)="openCreateTeacherDialog()" 
+          matTooltip="Vytvoriť učiteľa">
+            <mat-icon>add_circle</mat-icon>
+        </button>
+      </div>
+      <input [formControl]="search" placeholder="Search" class="search">
+      <!-- <select placeholder="Nieco" class="sel">
+        <option value="" disabled selected>Select your option</option>
+        <option value="hurr">Durr</option>
+      </select> -->
+    </div>
+    <div class="items-list" *ngIf="!loading; else loadingTemp">
+      <ng-container *ngIf="filteredTeachers.length > 0; else noTeachers">
+        <div class="item-card" *ngFor="let teacher of filteredTeachers" (click)="teacherSelected(teacher)" [ngClass]="{'active': teacher.id == selectedTeacher?.id}">
+          <div class="first-row">
+            <span class="item-name"> {{ teacher.degree }}. {{ teacher.name }} </span>
+            <!-- <span> {{ teacher.capacity }} miest </span> -->
+          </div>
+
+          <p class="item-type"> 
+            <span *ngIf="teacher?.department"> {{ teacher?.department?.abbr }} </span>
+            <span *ngIf="!teacher?.department" class="error"> <mat-icon> warning </mat-icon>  Nemá katedru </span> 
+            <!-- <mat-icon (click)="openDeleteDialog($event, teacher)">delete</mat-icon>  -->
+          </p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="right-content" *ngIf="selectedTeacher">
+    <ng-container *ngIf="!loadingTimetable; else loadingTTemp">
+      <div class="right-header">
+        <h2> {{ selectedTeacher?.name }} </h2>
+        <div class="buttons">
+          <button mat-flat-button color="warn" (click)="openDeleteDialog($event)"> Vymazať učiteľa </button>
+          <button mat-stroked-button color="primary" (click)="openEditConstraintsDialog($event)"> Obmedzenia času </button>
+          <button mat-flat-button color="primary" (click)="openChangeDepartmentDialog($event)"> Zmeniť katedru </button>
+        </div>
+      </div>
+      
+      <app-timetable-template [timeslots]="timeslots" [isTemplate]="false" [selectedTimeslots]="selectedTeacher.timeConstraints">
+      </app-timetable-template>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loadingTemp>
+  <app-loading text="Učiteľov"></app-loading>
+</ng-template>
+
+<ng-template #loadingTTemp>
+  <app-loading text="Rozvrh pre učiteľa {{ selectedTeacher?.name }}"></app-loading>
+</ng-template>
+
+<ng-template #noTeachers>
+  <p>Nenašli sa žiadny učitelia.</p>
+</ng-template>

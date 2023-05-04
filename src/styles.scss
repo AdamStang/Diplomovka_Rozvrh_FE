@@ -1,0 +1,164 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'constants.scss';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{ 
+    width: 100%;
+    height: 100%;
+}
+
+body { 
+    width: 100%;
+    height: 100%;
+    // background: $GREY_COLOR;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.error-snackbar{
+    background-color: $ERROR_COLOR;
+    color: white;
+    max-width: 80%;
+}
+
+.success-snackbar{
+    background-color: $PRIMARY_COLOR;
+    color: white;
+    max-width: 80%;
+}
+
+.error {
+    color: $ERROR_COLOR;
+    display: flex;
+    align-items: center;
+}
+
+.left-navigation {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    // gap: 16px;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.12);
+    z-index: 0;
+
+    .header {
+        display: flex;
+        flex-direction: column;
+        color: $PRIMARY_COLOR;
+        gap: 4px;
+        padding-inline: 24px;
+        padding-top: 24px;
+
+        .header-title {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search, .sel {
+            outline: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 2px solid $TEXT_LIGHT_COLOR;
+
+            &:focus {
+                border: 2px solid $PRIMARY_COLOR;
+            }
+        }
+    }
+
+    .items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px 24px;
+        overflow: auto;
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Hide scrollbar for IE, Edge and Firefox */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+
+        .item-card {
+            box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
+            border-radius: 4px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            color: $TEXT_LIGHT_COLOR;
+
+            .first-row {
+                display: flex; 
+                justify-content: space-between;
+                align-items: center;
+
+                .item-name {
+                    color: $PRIMARY_COLOR;
+                    font-weight: 500;
+                }
+            }
+
+            .item-type {
+                color: $TEXT_LIGHT_COLOR;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .mat-icon {
+                    font-size: 1.25rem;
+                    width: auto;
+                    height: auto;
+                }
+            }
+
+            &:hover {
+                box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.2);
+            }
+
+            &.active {
+                box-shadow: 0 0 8px 0 rgba($PRIMARY_COLOR, 0.7);
+            }
+        }
+    }
+}
+
+.right-content {
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 16px;
+
+    .right-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $GREY_COLOR;
+        color: $PRIMARY_COLOR;
+        border-radius: 4px;
+        padding: 8px 16px;
+
+        .buttons {
+            display: flex;
+            gap: 8px;
+        }
+    }
+}
+
+
+// .time-input {
+//     width: 100px !important;
+// }
+
+// .num-input {
+//     width: 150px !important;
+// }

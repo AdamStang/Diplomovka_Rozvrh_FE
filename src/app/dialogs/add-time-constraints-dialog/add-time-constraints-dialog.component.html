@@ -1,0 +1,10 @@
+<h2 mat-dialog-title class="dialog-header">Vybrať miestnosť</h2>
+<mat-dialog-content>
+  <app-timetable-template [timeslots]="data.timeslots" [isTemplate]="false" [allowSelect]="true"
+    (selectedItem)="itemSelected($event)" [selectedTimeslots]="timeslotIds">
+  </app-timetable-template>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Zrušiť</button>
+  <button mat-raised-button (click)="submit()" color="primary" cdkFocusInitial>Vytvoriť</button>
+</mat-dialog-actions>

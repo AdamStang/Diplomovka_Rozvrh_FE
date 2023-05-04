@@ -1,0 +1,8 @@
+<h2 mat-dialog-title class="dialog-header">Odstrániť {{ data.itemName }} </h2>
+<mat-dialog-content>
+  <p class="text">Chcete odstrániť túto položku? Táto položka sa úplne vymaže z databázy!</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Zrušiť</button>
+  <button mat-raised-button [mat-dialog-close]="true" color="primary" cdkFocusInitial>Odstrániť</button>
+</mat-dialog-actions>

@@ -1,0 +1,30 @@
+@import '../../../constants.scss';
+
+.timeslots-dialog-container {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+
+    .dialog-header {
+        color: $PRIMARY_COLOR;
+    }
+
+    .content{
+        height: 100%;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 8px;
+
+        .timeslots-form {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+
+            input[type=time] {
+                height: 16px;
+            }
+        }
+    }
+
+}

@@ -1,0 +1,62 @@
+<div class="departments-container">
+  <div class="left-navigation">
+    <div class="header">
+      <div class="header-title">
+        <h2>Katedry</h2>
+  
+        <button mat-icon-button color="primary" 
+          *ngIf="departments.length > 0"
+          (click)="openCreateDepartmentDialog()" 
+          matTooltip="Vytvoriť katedru">
+            <mat-icon>add_circle</mat-icon>
+        </button>
+      </div>
+      <input [formControl]="search" placeholder="Search" class="search">
+    </div>
+
+    <div class="items-list" *ngIf="!loading; else loadingTemp">
+      <ng-container *ngIf="filteredDepartments.length > 0; else noDepartments">
+        <div class="item-card" *ngFor="let department of filteredDepartments" (click)="showTeachers(department)">
+          <div class="first-row">
+            <span class="item-name"> {{ department.name }} </span>
+          </div>
+
+          <p class="item-type"> 
+            <span> {{ department.abbr }} </span> 
+            <!-- <mat-icon (click)="openDeleteDialog($event, department)">delete</mat-icon>  -->
+          </p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="right-content" *ngIf="selectedDepartment">
+    <ng-container *ngIf="!loadingTeachers; else loadingTTemp">
+      <div class="right-header">
+        <h2> {{ selectedDepartment?.name }} </h2>
+        <div class="buttons">
+          <button mat-flat-button color="warn" (click)="openDeleteDialog($event)"> Vymazať katedru </button>
+          <button mat-flat-button color="primary" [disabled]="teachersForDepartmentChange.length == 0" (click)="openMoveTeachersDialog()"> Presunúť vybraných </button>
+        </div>
+      </div>
+  
+      <div class="departments-teachers-grid">
+        <mat-checkbox *ngFor="let teacher of teachersForDepartment" (change)="toggleInList(teacher.id)" color="primary">
+          {{ teacher.degree }} {{ teacher.name }}
+        </mat-checkbox>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loadingTemp>
+  <app-loading text="Katedry"></app-loading>
+</ng-template>
+
+<ng-template #loadingTTemp>
+  <app-loading text="Učiteľov pre {{ selectedDepartment?.name }}"></app-loading>
+</ng-template>
+
+<ng-template #noDepartments>
+  <p>Nenašli sa žiadne katedry.</p>
+</ng-template>

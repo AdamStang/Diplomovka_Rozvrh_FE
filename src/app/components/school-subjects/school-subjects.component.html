@@ -1,0 +1,84 @@
+<div class="subjects-container">
+  <div class="left-navigation">
+    <div class="header">
+      <div class="header-title">
+        <h2>Predmety</h2>
+  
+        <button mat-icon-button color="primary" 
+          *ngIf="studyProgrammes.length > 0 && teachers.length > 0"
+          (click)="openCreateSchoolSubjectDialog()" 
+          matTooltip="Vytvoriť predmet">
+            <mat-icon>add_circle</mat-icon>
+        </button>
+      </div>
+      <input [formControl]="search" placeholder="Search" class="search">
+    </div>
+
+    <div class="items-list" *ngIf="!loading; else loadingTemp">
+      <ng-container *ngIf="filteredSchoolSubjects.length > 0; else noSubjects">
+        <div class="item-card" (click)="selectSubject(subject)" *ngFor="let subject of filteredSchoolSubjects">
+          <div class="first-row">
+            <span class="item-name"> {{ subject.name }} </span>
+            <span> {{ subject.lecturesPerWeek }} / {{ subject.practicePerWeek }} </span>
+          </div>
+
+          <p class="item-type"> 
+            <span *ngIf="subject?.teacher"> {{ subject?.teacher?.name }} </span>
+            <span *ngIf="!subject?.teacher" class="error"> <mat-icon> warning </mat-icon>  Nemá učiteľa </span> 
+          </p>
+
+          <p class="item-type"> 
+            <span> {{ subject.abbr }} </span> 
+            <!-- <mat-icon (click)="openDeleteDialog($event, subject)">delete</mat-icon>  -->
+          </p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="right-content" *ngIf="selectedSchoolSubject">
+    <ng-container *ngIf="!loadingLessons; else loadingTTemp">
+      <div class="right-header">
+        <h2> {{ selectedSchoolSubject?.name }} </h2>
+        <div class="buttons">
+          <button mat-flat-button color="warn" (click)="openDeleteDialog($event)"> Vymazať predmet </button>
+          <button mat-flat-button color="primary" (click)="openAddLessonDialog()"> Pridat hodinu </button>
+        </div>
+      </div>
+  
+      <div class="lessons-grid">
+        <div class="lesson header">
+          <span> Názov </span>
+          <span> Typ </span>
+          <span> Učiteľ </span>
+          <span> Miestnosť </span>
+          <span> Čas </span>
+          <span> Akcia </span>
+        </div>
+        <div class="lesson" *ngFor="let lesson of lessonsForSchoolSubject">
+          <span> {{ lesson.name }} </span>
+          <span> {{ lesson.type }} </span>
+          <span *ngIf="lesson?.teacher"> {{ lesson?.teacher?.name ?? 'Nemá učiteľa' }} </span>
+          <span *ngIf="!lesson?.teacher" class="error"> <mat-icon> warning </mat-icon>  Nemá učiteľa </span>
+          <span *ngIf="lesson?.room"> {{ lesson?.room?.name }} </span>
+          <span *ngIf="!lesson?.room" class="error"> <mat-icon> warning </mat-icon>  Nemá miestnosť </span>
+          <span *ngIf="lesson?.timeslot"> {{ lesson?.timeslot?.day }} {{ lesson?.timeslot?.startTime }} </span>
+          <span *ngIf="!lesson?.timeslot" class="error"> <mat-icon> warning </mat-icon>  Nemá čas </span>
+          <button mat-stroked-button color="primary" (click)="openEditLessonDialog(lesson)">Upraviť</button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loadingTemp>
+  <app-loading text="Predmety"></app-loading>
+</ng-template>
+
+<ng-template #loadingTTemp>
+  <app-loading text="Hodiny predmetu {{ selectedSchoolSubject?.name }}"></app-loading>
+</ng-template>
+
+<ng-template #noSubjects>
+  <p>Nenašli sa žiadne predmety.</p>
+</ng-template>

@@ -1,0 +1,131 @@
+<div class="study-programmes-container" cdkDropListGroup>
+  <div class="left">
+    <mat-radio-group aria-label="Select an option" class="switch-action" [formControl]="switchAction">
+      <mat-radio-button value="paralelky">Paralelky</mat-radio-button>
+      <mat-radio-button value="rozvrhovanie">Rozvrhovanie</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-form-field appearance="outline" class="choose-Parallel-block" *ngIf="switchAction.value == 'rozvrhovanie'">
+      <mat-label>Paralelka</mat-label>
+      <mat-select [formControl]="studyProgramme">
+        <mat-option [value]="studyProgramme" *ngFor="let studyProgramme of studyProgrammes"> {{ studyProgramme.name }} - {{ studyProgramme.grade }} ročník </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="choose-group" *ngIf="switchAction.value == 'rozvrhovanie' && studyProgramme.value">
+      <mat-label>Skupina</mat-label>
+      <mat-select [formControl]="group">
+        <mat-option value="prednasky"> Prednášky </mat-option>
+        <mat-option [value]="group + 1" *ngFor="let group of groups"> Skupina {{ group + 1 }} </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="left-header" *ngIf="switchAction.value == 'paralelky'">
+      <h2>Paralelky</h2>
+
+      <button mat-icon-button color="primary" 
+        *ngIf="studyProgrammes.length > 0"
+        (click)="openCreateStudyProgrammeDialog()" 
+        matTooltip="Vytvoriť paralelku">
+          <mat-icon>add_circle</mat-icon>
+      </button>
+    </div>
+    <input [formControl]="search" placeholder="Search" class="search" *ngIf="switchAction.value == 'paralelky'">
+
+    <div class="study-programmes-list">
+      <ng-container *ngIf="switchAction.value == 'paralelky'">
+        <ng-container *ngIf="!loading; else loadingTemp">
+          <ng-container *ngIf="filteredStudyProgrammes.length > 0; else noStudyProgrammes">
+            <div class="study-programme-card" *ngFor="let studyProgramme of filteredStudyProgrammes">
+              <div class="first-row">
+                <span class="study-programme-name"> {{ studyProgramme.name }} </span>
+                <span> {{ studyProgramme.numberOfStudents }} </span>
+              </div>
+
+              <p> {{ studyProgramme?.grade }} ročník </p>
+
+              <p class="study-programme-type"> 
+                <span> {{ studyProgramme.abbr }} </span> 
+                <mat-icon (click)="openDeleteDialog(studyProgramme)">delete</mat-icon> 
+              </p>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="switchAction.value == 'rozvrhovanie'">
+        <div class="dragable-subjects-wrapper" id="unassigned" cdkDropList [cdkDropListData]="filteredUnassignedLessons" (cdkDropListDropped)="drop($event)">
+          <div class="study-programme-card" *ngFor="let lesson of filteredUnassignedLessons" cdkDrag>
+            <div class="first-row">
+              <span class="study-programme-name"> {{ lesson.schoolSubject.name }} </span>
+              <span> {{ lesson?.name }} </span>
+            </div>
+
+            <!-- <p> {{ lesson?.type }} </p> -->
+            <p> {{ lesson?.teacher?.name }} </p>
+
+            <!-- <p class="study-programme-type"> 
+              <span> {{ lesson.schoolSubject.abbr }} </span> 
+            </p> -->
+
+            <p class="placeholder" *cdkDragPlaceholder></p>
+            <p class="preview" *cdkDragPreview> {{ lesson.schoolSubject.abbr }} </p>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="right" *ngIf="selectedStudyProgramme">
+    <ng-container *ngIf="!loadingTimetable; else loadingTTemp">
+      <h2 class="selected-study-programme"> {{ selectedStudyProgramme?.name }} - {{ selectedStudyProgramme?.grade }} ročník </h2>
+      
+      <div class="subjects-timetable-grid">
+        <div></div>
+        
+        <div class="hours" [ngStyle]="{'grid-template-columns': gridNum}">
+          <div *ngFor="let time of hours">
+            {{ time }}
+          </div>
+        </div>
+
+        <div class="days">
+          <div>Pon</div>
+          <div>Utr</div>
+          <div>Str</div>
+          <div>Štv</div>
+          <div>Pia</div>
+        </div>
+
+        <div class="my-grid" [ngStyle]="{'grid-template-columns': gridNum}">
+          <div class="my-grid-item" *ngFor="let slot of timeslots">
+            <ng-container *ngIf="slot.subjects">
+              <div class="tasks" cdkDropList [id]="slot.id" [cdkDropListData]="slot.subjects" (cdkDropListDropped)="drop($event)">
+                <div *ngFor="let item of slot.subjects" cdkDrag class="grab">
+                  <p *ngIf="item?.type == lessonType.Prednaska"> {{ item.schoolSubject.abbr }} </p>
+                  <p *ngIf="item?.type == lessonType.Cvicenie"> {{ item.schoolSubject.abbr?.toLowerCase() }} </p>
+                  <p> {{ item?.room?.name }} </p>
+                  <p> {{ item?.teacher?.name }} </p>
+                  <p class="placeholder" *cdkDragPlaceholder></p>
+                  <p class="preview" *cdkDragPreview> {{ item.schoolSubject.abbr }} </p>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loadingTemp>
+  <app-loading text="Paralelky"></app-loading>
+</ng-template>
+
+<ng-template #loadingTTemp>
+  <app-loading text="Rozvrh"></app-loading>
+</ng-template>
+
+<ng-template #noStudyProgrammes>
+  <p>Nenašli sa žiadne paralelky.</p>
+</ng-template>

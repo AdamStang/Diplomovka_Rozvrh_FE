@@ -1,0 +1,39 @@
+<div class="timeslots-dialog-container">
+  <h2 mat-dialog-title class="dialog-header">Vybrať časy v rozvrhu</h2>
+
+  <mat-dialog-content class="content">
+    <form class="timeslots-form" [formGroup]="myForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Začiatok výučby</mat-label>
+        <input matInput type="time" formControlName="startingTime">
+        <mat-error *ngIf="myForm?.get('startingHour')?.invalid">Toto políčko je Povinné</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Dĺžka hodiny</mat-label>
+        <input matInput type="number" min="1" [max]="60" formControlName="lengthOfHour">
+        <mat-error *ngIf="myForm?.get('lengthOfHour')?.invalid">Toto políčko je Povinné</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Dĺžka prestávky</mat-label>
+        <input matInput type="number" min="1" [max]="60" formControlName="lengthOfRest">
+        <mat-error *ngIf="myForm?.get('lengthOfRest')?.invalid">Toto políčko je Povinné</mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Počet hodín za deň</mat-label>
+        <input matInput type="number" min="1" max="maxNumPerDay" formControlName="numberOfHours">
+        <mat-error *ngIf="myForm?.get('numberOfHours')?.invalid">Toto políčko je Povinné</mat-error>
+      </mat-form-field>
+    </form>
+    
+    <app-timetable-template [timeslots]="timeslots">
+    </app-timetable-template>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Zrušiť</button>
+    <button mat-raised-button (click)="submit()" color="primary" cdkFocusInitial>Potvrdiť</button>
+  </mat-dialog-actions>
+</div>

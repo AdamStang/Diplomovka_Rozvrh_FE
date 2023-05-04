@@ -1,0 +1,69 @@
+@import '../../../constants.scss';
+
+.grid-container{
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 8px;
+    height: 1fr;
+
+    .hours {
+        display: grid; 
+        gap: 2px;
+        color: $TEXT_LIGHT_COLOR;
+
+        div {
+            margin: 0 auto;
+        }
+    }
+    
+    .days {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2px;
+        grid-template-rows: repeat(5, 1fr);
+        color: $TEXT_LIGHT_COLOR;
+
+        div {
+            margin: auto 0;
+        }
+    }
+
+    .my-grid {
+        display: grid;
+        grid-template-rows: repeat(5, 1fr);
+        gap: 4px;
+
+        .my-grid-item {
+            // border: 2px dotted $TEXT_LIGHT_COLOR;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 45px;
+
+            mat-icon {
+                color: $ERROR_COLOR;
+                font-weight: bold;
+            }
+
+            .tasks {
+                // background-color: yellow;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                .item {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}

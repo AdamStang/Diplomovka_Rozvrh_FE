@@ -1,0 +1,38 @@
+<div class="grid-container" *ngIf="timeslots.length > 0">
+  <div></div>
+  <div class="hours" [ngStyle]="{'grid-template-columns': numberOfHoursStr}">
+    <div *ngFor="let hour of hours">
+      {{ hour }}
+    </div>
+  </div>
+
+  <div class="days">
+    <div>Pon</div>
+    <div>Utr</div>
+    <div>Str</div>
+    <div>Štv</div>
+    <div>Pia</div>
+  </div>
+
+  <div class="my-grid" [ngStyle]="{'grid-template-columns': numberOfHoursStr, 'gap': gap}">
+    <div class="my-grid-item" (click)="selectItem(timeslot)" *ngFor="let timeslot of timeslots" 
+        [ngStyle]="{'border': border}" [style.background-color]="(selectedTimeslots.includes(timeslot.id)) ? 'rgba(255, 0, 0, 0.2)' : '#ffffff'">
+      <ng-container *ngIf="selectedTimeslots.includes(timeslot.id)">
+        <mat-icon> close </mat-icon>
+      </ng-container>
+      <ng-container *ngIf="timeslot.subjects">
+        <div class="tasks">
+          <div *ngFor="let item of timeslot.subjects" class="item">
+            <!-- <p> {{ item.schoolSubject.abbr }} </p> -->
+            <p *ngIf="item?.type == lessonType.Prednaska"> {{ item.schoolSubject.abbr }} </p>
+            <p *ngIf="item?.type == lessonType.Cvicenie"> {{ item.schoolSubject.abbr?.toLowerCase() }} / {{ item.group }} </p>
+            <!-- <p> {{ item?.name }} </p> -->
+            <p> {{ item.schoolSubject?.studyProgramme?.abbr }} {{ item.schoolSubject?.studyProgramme?.grade }} roc </p>
+            <p> {{ item?.room?.name }} </p>
+            <p> {{ item?.teacher?.name }} </p>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

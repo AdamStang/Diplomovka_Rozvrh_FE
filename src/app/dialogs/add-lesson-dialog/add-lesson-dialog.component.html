@@ -1,0 +1,31 @@
+<h2 mat-dialog-title class="dialog-header">Vytvoriť hodinu</h2>
+<mat-dialog-content>
+  <form class="create-institute-form" [formGroup]="myForm!!">
+    <mat-form-field appearance="outline">
+      <mat-label>Názov Hodiny</mat-label>
+      <input matInput formControlName="name">
+      <mat-error *ngIf="myForm?.get('name')?.invalid">Názov je povinný</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Typ Hodiny</mat-label>
+      <mat-select formControlName="type">
+        <mat-option [value]="lessonTypes.Prednaska"> {{ lessonTypes.Prednaska }} </mat-option>
+        <mat-option [value]="lessonTypes.Cvicenie"> {{ lessonTypes.Cvicenie }} </mat-option>
+      </mat-select>
+      <mat-error *ngIf="myForm?.get('type')?.invalid">Skratka je povinná</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Učiteľ</mat-label>
+      <mat-select formControlName="teacher">
+        <mat-option *ngFor="let teacher of data" [value]="teacher"> 
+          {{ teacher.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="myForm?.get('type')?.invalid">Skratka je povinná</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Zrušiť</button>
+  <button mat-raised-button (click)="submit()" color="primary" cdkFocusInitial>Vytvoriť</button>
+</mat-dialog-actions>

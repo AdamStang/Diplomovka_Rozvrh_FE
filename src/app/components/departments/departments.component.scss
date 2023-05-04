@@ -1,0 +1,16 @@
+@import '../../../constants.scss';
+
+.departments-container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 100%;
+
+    .departments-teachers-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        height: fit-content;
+        gap: 16px;
+    }
+}

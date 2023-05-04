@@ -1,0 +1,46 @@
+@import '../../../constants.scss';
+
+.home-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 32px;
+    padding: 32px 80px;
+
+    .cards-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 24px;
+
+        .stats-card {
+            box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12);
+            border-radius: 4px;
+            padding: 24px 32px;
+
+            .card-name {
+                color: $TEXT_LIGHT_COLOR;
+                margin-bottom: 4px;
+            }
+
+            .card-value {
+                font-size: 2.5rem;
+                font-weight: bold;
+                color: $PRIMARY_COLOR;
+            }
+        }
+    }
+
+    // .template {
+        // padding: 0 80px;
+        // padding-bottom: 32px;
+    // }
+
+    .fab {
+        position: absolute;
+        bottom: 24px;
+        right: 24px;
+    }
+}
