@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -29,10 +29,10 @@ export class StudyProgrammesComponent implements OnInit {
   public hours: string[] = [];
   public groups: number[] = [];
 
-  public studyProgramme = new FormControl();
-  public switchAction = new FormControl("paralelky");
-  public group = new FormControl();
-  public search = new FormControl('');
+  public studyProgramme = new UntypedFormControl();
+  public switchAction = new UntypedFormControl("paralelky");
+  public group = new UntypedFormControl();
+  public search = new UntypedFormControl('');
 
   public loading = false;
   public loadingTimetable = false;
@@ -57,10 +57,20 @@ export class StudyProgrammesComponent implements OnInit {
   ngOnInit() {
     this.getStudyProgrammes();
 
+    this.group.valueChanges.subscribe(res => {
+      if (res == "prednasky") {
+        this.filteredAssignedLessons = this.assignedLessons.filter(x => x.type == LessonTypeEnum.Prednaska);
+        this.filteredUnassignedLessons = this.unassignedLessons.filter(x => x.type == LessonTypeEnum.Prednaska);
+        this.updateAssignedLessons(this.filteredAssignedLessons);
+      } else {
+        this.filteredAssignedLessons = this.assignedLessons.filter(x => x?.group == res || x.type == LessonTypeEnum.Prednaska);
+        this.filteredUnassignedLessons = this.unassignedLessons.filter(x => x?.group == res);
+        this.updateAssignedLessons(this.filteredAssignedLessons);
+      }
+    });
+
     this.studyProgramme.valueChanges.subscribe(result => {
-      console.log(result);
       this.selectedStudyProgramme = result;
-      // this.group.setValue("prednasky");
       this.groups = Array.from({length: this.selectedStudyProgramme?.numberOfGroups}, (v, i) => i)
       this.clearTimeslots();
 
@@ -72,30 +82,15 @@ export class StudyProgrammesComponent implements OnInit {
         finalize(() => this.loadingTimetable = false)
       ).subscribe(result => {
         this.assignedLessons = result;
-        this.group.setValue("prednasky");
-        // this.updateAssignedLessons(result);
       });
 
       this.loadingSubjects = true;
       this.apiService.getUnassignedLessonsForStudyProgramme(id).pipe(
         finalize(() => this.loadingSubjects = false)
       ).subscribe(result => {
-        console.log(result);
         this.unassignedLessons = result;
+        this.group.patchValue("prednasky");
       });
-    });
-
-    this.group.valueChanges.subscribe(res => {
-      console.log(res);
-      if (res == "prednasky") {
-        this.filteredAssignedLessons = this.assignedLessons.filter(x => x.type == LessonTypeEnum.Prednaska);
-        this.filteredUnassignedLessons = this.unassignedLessons.filter(x => x.type == LessonTypeEnum.Prednaska);
-        this.updateAssignedLessons(this.filteredAssignedLessons);
-      } else {
-        this.filteredAssignedLessons = this.assignedLessons.filter(x => x?.group == res || x.type == LessonTypeEnum.Prednaska);
-        this.filteredUnassignedLessons = this.unassignedLessons.filter(x => x?.group == res);
-        this.updateAssignedLessons(this.filteredAssignedLessons);
-      }
     });
 
     this.getTimeslots();
@@ -133,6 +128,10 @@ export class StudyProgrammesComponent implements OnInit {
     this.timeslots.forEach(slot => {
       slot.subjects = [];
     });
+  }
+
+  public SomeClick() {
+    this.group.patchValue("prednasky");
   }
 
   public updateAssignedLessons(result: Lesson[]) {
@@ -185,7 +184,6 @@ export class StudyProgrammesComponent implements OnInit {
 
       dialogRef.afterClosed().pipe(
       ).subscribe(res => {
-        console.log("ROOM: ", res);
         if(!res || !res.room) return;
         transferArrayItem(
           event.previousContainer.data,
@@ -193,7 +191,6 @@ export class StudyProgrammesComponent implements OnInit {
           event.previousIndex,
           event.currentIndex
         );
-        console.log(res);
         this.loadingService.openDialog("Priraďujem hodine miesto a čas");
         this.apiService.assignTimeslotAndRoomToLesson(lessonId, timeslotId, res.room.id, res.constraint, teacherId).pipe(
           
@@ -234,11 +231,11 @@ export class StudyProgrammesComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result == false) return;
       this.loadingService.openDialog("Odstraňujem paralelku");
-      console.log(parallelBlock);
       this.apiService.deleteStudyProgramme(parallelBlock.id).pipe(
         finalize(() => this.loadingService.closeDialog())
       ).subscribe(_ => {
         this.snackbarService.showSuccessSnackBar("Paralelka bola úspešne odstránená.");
+        this.selectedStudyProgramme = null;
         this.getStudyProgrammes();
       });
     });
@@ -249,7 +246,6 @@ export class StudyProgrammesComponent implements OnInit {
     let teacherId = event.previousContainer.data[event.previousIndex].teacher.id;
     let lessonId = event.previousContainer.data[event.previousIndex].id;
 
-    console.log(event.container.id);
     if (event.previousContainer === event.container) {
       if(event.container.id == "unassigned")
         this.changePositionInUnassigned(event);

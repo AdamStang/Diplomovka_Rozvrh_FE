@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -8,10 +8,10 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./add-study-programme-dialog.component.scss']
 })
 export class AddStudyProgrammeDialogComponent implements OnInit {
-  public myForm: FormGroup | undefined;
+  public myForm: UntypedFormGroup | undefined;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddStudyProgrammeDialogComponent>
   ) { }
 
@@ -21,7 +21,8 @@ export class AddStudyProgrammeDialogComponent implements OnInit {
       name: ['', [Validators.required]],
       abbr: ['', [Validators.required]],
       grade: ['', [Validators.required]],
-      numberOfStudents: [null, [Validators.required]]
+      numberOfStudents: [null, [Validators.required]],
+      numberOfGroups: [null, [Validators.required]]
     });
   }
 

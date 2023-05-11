@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, forkJoin } from 'rxjs';
 import { finalize, switchMap } from 'rxjs/operators';
@@ -28,7 +28,7 @@ export class TeachersComponent implements OnInit, OnDestroy {
   public selectedTeacher: Teacher | null = null;
   public timeslots: Timeslot[] = [];
 
-  public search = new FormControl('');
+  public search = new UntypedFormControl('');
   public stream$ = new Subject<Teacher>();
 
   public loading = false;
@@ -143,7 +143,6 @@ export class TeachersComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result == false) return;
       this.loadingService.openDialog("Odstraňujem učiteľa");
-      console.log(teacher);
       this.apiService.deleteTeacher(teacher.id).pipe(
         finalize(() => this.loadingService.closeDialog())
       ).subscribe(_ => {
@@ -183,12 +182,12 @@ export class TeachersComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result == false) return;
       this.loadingService.openDialog("Ukladám obmedzenia času.");
       this.apiService.updateTimeConstraintsForTeacher(this.selectedTeacher.id, result).pipe(
         finalize(() => this.loadingService.closeDialog())
       ).subscribe(_ => {
+        this.selectedTeacher.timeConstraints = result;
         this.snackbarService.showSuccessSnackBar("Obmedzenia času boli úspešne vytvorené.");
       });
     });

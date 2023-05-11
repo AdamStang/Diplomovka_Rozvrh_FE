@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Department } from 'src/app/models/Department';
 
@@ -9,10 +9,10 @@ import { Department } from 'src/app/models/Department';
   styleUrls: ['./add-teacher-dialog.component.scss']
 })
 export class AddTeacherDialogComponent implements OnInit {
-  public myForm: FormGroup | undefined;
+  public myForm: UntypedFormGroup | undefined;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddTeacherDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Department[]
   ) { }

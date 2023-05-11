@@ -12,7 +12,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="choose-group" *ngIf="switchAction.value == 'rozvrhovanie' && studyProgramme.value">
+    <mat-form-field appearance="outline" class="choose-group" *ngIf="switchAction.value == 'rozvrhovanie' && studyProgramme.value && !loadingTimetable && !loadingSubjects">
       <mat-label>Skupina</mat-label>
       <mat-select [formControl]="group">
         <mat-option value="prednasky"> Prednášky </mat-option>
@@ -78,7 +78,7 @@
 
   <div class="right" *ngIf="selectedStudyProgramme">
     <ng-container *ngIf="!loadingTimetable; else loadingTTemp">
-      <h2 class="selected-study-programme"> {{ selectedStudyProgramme?.name }} - {{ selectedStudyProgramme?.grade }} ročník </h2>
+      <h2 class="selected-study-programme" (click)="SomeClick()"> {{ selectedStudyProgramme?.name }} - {{ selectedStudyProgramme?.grade }} ročník </h2>
       
       <div class="subjects-timetable-grid">
         <div></div>

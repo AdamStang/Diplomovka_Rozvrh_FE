@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { finalize, switchMap } from 'rxjs/operators';
@@ -24,7 +24,7 @@ export class DepartmentsComponent implements OnInit, OnDestroy {
   public selectedDepartment: Department;
   public teachersForDepartmentChange: string[] = [];
 
-  public search = new FormControl('');
+  public search = new UntypedFormControl('');
   public stream$ = new Subject<Department>();
   
   public loading = false;

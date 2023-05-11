@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AddSubjectDialogComponent } from '../add-subject-dialog/add-subject-dialog.component';
 import { Department } from 'src/app/models/Department';
@@ -10,10 +10,10 @@ import { Department } from 'src/app/models/Department';
   styleUrls: ['./move-teachers-dialog.component.scss']
 })
 export class MoveTeachersDialogComponent implements OnInit {
-  public myForm: FormGroup | undefined;
+  public myForm: UntypedFormGroup | undefined;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddSubjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Department[]
   ) { }

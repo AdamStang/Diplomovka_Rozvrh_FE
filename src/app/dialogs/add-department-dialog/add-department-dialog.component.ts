@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -8,10 +8,10 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./add-department-dialog.component.scss']
 })
 export class AddDepartmentDialogComponent implements OnInit {
-  public myForm: FormGroup | undefined;
+  public myForm: UntypedFormGroup | undefined;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddDepartmentDialogComponent>
   ) { }
 

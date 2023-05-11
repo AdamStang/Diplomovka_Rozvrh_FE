@@ -6,5 +6,10 @@
 
 .create-study-programme-form {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+}
+
+.grid-full-line {
+    grid-column: 1/-1;
 }

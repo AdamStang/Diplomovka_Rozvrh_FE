@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { RoomTypeEnum } from 'src/app/Enums/RoomTypeEnum.enum';
 
@@ -10,12 +10,12 @@ import { RoomTypeEnum } from 'src/app/Enums/RoomTypeEnum.enum';
 })
 export class AddRoomDialogComponent implements OnInit {
   public roomTypes = RoomTypeEnum;
-  public myForm: FormGroup | undefined;
+  public myForm: UntypedFormGroup | undefined;
   public update: boolean = false;
   public title: string = "Vytvoriť";
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddRoomDialogComponent>,
   ) { }
 

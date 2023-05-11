@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LessonTypeEnum } from 'src/app/Enums/LessonTypeEnum.enum';
 import { StudyProgramme } from 'src/app/models/StudyProgramme';
@@ -11,28 +11,31 @@ import { Teacher } from 'src/app/models/Teacher';
   styleUrls: ['./add-subject-dialog.component.scss']
 })
 export class AddSubjectDialogComponent implements OnInit {
-  public myForm: FormGroup | undefined;
-  public lessonsForSubject: FormGroup;
+  public myForm: UntypedFormGroup | undefined;
+  public lessonsForSubject: UntypedFormGroup;
   public lessons = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddSubjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { teachers: Teacher[], studyProgrammes: StudyProgramme[] }
   ) { }
 
   ngOnInit() {
-    console.log(this.data.studyProgrammes);
     this.myForm = this.fb.group({
       id: [''],
       name: ['', [Validators.required]],
       abbr: ['', [Validators.required]],
-      numberOfStudents: [null, [Validators.required]],
+      numberOfStudents: [{value: null, disabled: true}, [Validators.required]],
       lecturesPerWeek: [null, [Validators.required]],
       practicePerWeek: [null, [Validators.required]],
-      numberOfGroups: [null, [Validators.required]],
+      numberOfGroups: [{value: null, disabled: true}, [Validators.required]],
       studyProgramme: [null, [Validators.required]],
       teacher: [null]
+    });
+    this.myForm.get("studyProgramme").valueChanges.subscribe(result => {
+      this.myForm.get("numberOfStudents").setValue(result.numberOfStudents);
+      this.myForm.get("numberOfGroups").setValue(result.numberOfGroups);
     });
     this.lessonsForSubject = this.fb.group({
       practices: this.fb.array([]),
@@ -45,10 +48,6 @@ export class AddSubjectDialogComponent implements OnInit {
     if (this.lessonsForSubject?.valid) {
       let subj = this.myForm.getRawValue();
       subj.lessons = [...this.lectures?.getRawValue(), ...this.practices?.getRawValue()];
-      // console.log(this.myForm?.getRawValue());
-      // console.log(this.lectures?.getRawValue());
-      // console.log(this.practices?.getRawValue());
-      console.log(subj);
       this.dialogRef.close(subj);
     }
   }
@@ -62,12 +61,12 @@ export class AddSubjectDialogComponent implements OnInit {
     }
   }
 
-  get practices(): FormArray {
-    return this.lessonsForSubject.get("practices") as FormArray;
+  get practices(): UntypedFormArray {
+    return this.lessonsForSubject.get("practices") as UntypedFormArray;
   }
 
-  get lectures(): FormArray {
-    return this.lessonsForSubject.get("lectures") as FormArray;
+  get lectures(): UntypedFormArray {
+    return this.lessonsForSubject.get("lectures") as UntypedFormArray;
   }
 
   public createNumOfPractices() {
@@ -78,7 +77,7 @@ export class AddSubjectDialogComponent implements OnInit {
           name: [`Cvičenie ${i + 1} Skupina ${j + 1}`, [Validators.required]],
           type: [LessonTypeEnum.Cvicenie],
           group: [j + 1], 
-          numberOfStudents: [this.myForm.get('numberOfStudents').value / this.myForm.get("numberOfGroups").value, [Validators.required]],
+          numberOfStudents: [{ value: this.myForm.get('numberOfStudents').value / this.myForm.get("numberOfGroups").value, disabled: true }, [Validators.required]],
           teacher: [this.myForm.get('teacher').value],
           schoolSubject: [this.myForm?.getRawValue()],
         }));
@@ -92,7 +91,7 @@ export class AddSubjectDialogComponent implements OnInit {
         id: [''],
         name: [`Prednáška ${i + 1}`, [Validators.required]],
         type: [LessonTypeEnum.Prednaska],
-        numberOfStudents: [this.myForm.get('numberOfStudents').value / this.myForm.get("lecturesPerWeek").value, [Validators.required]],
+        numberOfStudents: [{ value: this.myForm.get('numberOfStudents').value, disabled: true }, [Validators.required]],
         teacher: [this.myForm.get('teacher').value],
         schoolSubject: [this.myForm?.getRawValue()],
       }));

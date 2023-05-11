@@ -16,7 +16,7 @@ export class AddTimeConstraintsDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.timeslotIds = this.data.timeslotIds;
+    this.timeslotIds = [...this.data.timeslotIds];
   }
 
   public itemSelected(timeslotId: string) {

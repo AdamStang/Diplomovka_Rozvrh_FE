@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LessonTypeEnum } from 'src/app/Enums/LessonTypeEnum.enum';
 import { Teacher } from 'src/app/models/Teacher';
@@ -10,11 +10,11 @@ import { Teacher } from 'src/app/models/Teacher';
   styleUrls: ['./add-lesson-dialog.component.scss']
 })
 export class AddLessonDialogComponent implements OnInit {
-  public myForm: FormGroup | undefined;
+  public myForm: UntypedFormGroup | undefined;
   public lessonTypes = LessonTypeEnum;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AddLessonDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Teacher[]
   ) { }

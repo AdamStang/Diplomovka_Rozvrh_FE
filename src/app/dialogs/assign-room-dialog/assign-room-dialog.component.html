@@ -3,14 +3,14 @@
   <form class="assign-room-form" [formGroup]="myForm" *ngIf="next">
     <mat-form-field appearance="outline">
       <mat-label>Miestnosť</mat-label>
-      <mat-select formControlName="room">
+      <mat-select #mySelect formControlName="room">
         <mat-option *ngFor="let room of data.rooms" [value]="room"> 
           <div class="room-option">
             <p class="first-row"> 
               <span> {{ room.name }} </span>
-              <span> {{ room.capacity }} miest </span>
+              <span *ngIf="mySelect.panelOpen"> {{ room.capacity }} miest </span>
             </p>
-            <p class="second-row"> {{ room.type }} </p>
+            <p class="second-row" *ngIf="mySelect.panelOpen"> {{ room.type }} </p>
           </div>
         </mat-option>
       </mat-select>

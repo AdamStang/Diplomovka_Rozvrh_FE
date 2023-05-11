@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Timeslot } from 'src/app/models/Timeslot';
@@ -11,12 +11,12 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./timeslots-dialog.component.scss']
 })
 export class TimeslotsDialogComponent implements OnInit {
-  public myForm: FormGroup;
+  public myForm: UntypedFormGroup;
   public timeslots: Timeslot[] = [];
   public maxNumPerDay = 12;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<TimeslotsDialogComponent>,
     private commonService: CommonService,
   ) { }

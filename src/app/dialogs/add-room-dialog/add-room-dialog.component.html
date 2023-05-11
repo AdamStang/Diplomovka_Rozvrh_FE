@@ -15,8 +15,9 @@
       <mat-label>Typ miestnosti</mat-label>
       <mat-select formControlName="type">
         <mat-option [value]="roomTypes.U"> {{ roomTypes.U }} </mat-option>
-        <mat-option [value]="roomTypes.L"> {{ roomTypes.L }} </mat-option>
         <mat-option [value]="roomTypes.CP"> {{ roomTypes.CP }} </mat-option>
+        <mat-option [value]="roomTypes.L"> {{ roomTypes.L }} </mat-option>
+        <mat-option [value]="roomTypes.T"> {{ roomTypes.T }} </mat-option>
       </mat-select>
       <mat-error *ngIf="myForm?.get('type')?.invalid">Typ je povinný</mat-error>
     </mat-form-field>

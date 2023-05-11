@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddRoomDialogComponent } from 'src/app/dialogs/add-room-dialog/add-room-dialog.component';
 import { ApiService } from 'src/app/services/api.service';
 import { finalize, switchMap } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { DeleteDialogComponent } from 'src/app/shared/dialogs/delete-dialog/delete-dialog.component';
 import { LoadingService } from 'src/app/shared/services/loading.service';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
@@ -27,8 +27,8 @@ export class RoomsComponent implements OnInit, OnDestroy {
   public loading = false;
   public loadingTimetable = false;
   
-  public filter = new FormControl("all");
-  public search = new FormControl('');
+  public filter = new UntypedFormControl("all");
+  public search = new UntypedFormControl('');
   public stream$ = new Subject<Room>();
 
   constructor(
@@ -128,7 +128,6 @@ export class RoomsComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result == false) return;
       this.loadingService.openDialog("Odstraňujem miestnosť");
-      console.log(room);
       this.apiService.deleteRoom(room.id).pipe(
         finalize(() => this.loadingService.closeDialog())
       ).subscribe(_ => {

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { finalize, switchMap } from 'rxjs/operators';
@@ -32,7 +32,7 @@ export class SchoolSubjectsComponent implements OnInit, OnDestroy {
   public studyProgrammes: StudyProgramme[] = [];
   public lessonsForSchoolSubject: Lesson[] = [];
 
-  public search = new FormControl('');
+  public search = new UntypedFormControl('');
   public stream$ = new Subject<SchoolSubject>();
 
   public loading = false;
@@ -62,7 +62,6 @@ export class SchoolSubjectsComponent implements OnInit, OnDestroy {
   }
 
   public searchValueChanges() {
-    console.log("BBBBB");
     this.search.valueChanges.subscribe(result => {
       if (result.trim() == '') this.filteredSchoolSubjects = this.schoolSubjects;
       else {

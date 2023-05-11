@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Room } from 'src/app/models/Room';
 
@@ -9,12 +9,12 @@ import { Room } from 'src/app/models/Room';
   styleUrls: ['./assign-room-dialog.component.scss']
 })
 export class AssignRoomDialogComponent implements OnInit {
-  public myForm: FormGroup;
-  public overrideCollision = new FormControl(false);
+  public myForm: UntypedFormGroup;
+  public overrideCollision = new UntypedFormControl(false);
   public next = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<AssignRoomDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { rooms: Room[], constraint: boolean }
   ) { }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, forkJoin } from 'rxjs';
 import { Lesson } from 'src/app/models/Lesson';
@@ -14,11 +14,11 @@ import { ApiService } from 'src/app/services/api.service';
   styleUrls: ['./edit-lesson-dialog.component.scss']
 })
 export class EditLessonDialogComponent implements OnInit {
-  public myForm: FormGroup | undefined;
+  public myForm: UntypedFormGroup | undefined;
   public loading = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: MatDialogRef<EditLessonDialogComponent>,
     private apiService: ApiService,
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -30,7 +30,6 @@ export class EditLessonDialogComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log("DATA: ", this.data.lesson.teacher.name);
     this.myForm = this.fb.group({
       lesson: [this.data?.lesson ?? null],
       teacher: [this.data?.lesson?.teacher ?? null],
@@ -57,7 +56,7 @@ export class EditLessonDialogComponent implements OnInit {
 
     this.myForm.get("room").valueChanges.subscribe(result => {
       let timeslot = this.myForm.get("timeslot");
-      if (timeslot == null) return;
+      if (timeslot?.value == null) return;
 
       this.loading = true;
       this.apiService.checkRoomTimeCollision(result.id, timeslot.value.id).subscribe(res => {
@@ -73,10 +72,10 @@ export class EditLessonDialogComponent implements OnInit {
       let teacher = this.myForm.get("teacher");
       let endArray: [Observable<boolean> | null, Observable<boolean> | null, Observable<boolean> | null] = [null, null, null];
 
-      if (room != null) {
+      if (room.value != null) {
         endArray[0] = this.apiService.checkRoomTimeCollision(room.value.id, result.id);
       }
-      if (teacher != null) {
+      if (teacher.value != null) {
         endArray[1] = this.apiService.checkTeacherTimeCollision(teacher.value.id, result.id);
         endArray[2] = this.apiService.checkTeacherTimeslotConstraint(teacher.value.id, result.id);
       }
@@ -84,18 +83,22 @@ export class EditLessonDialogComponent implements OnInit {
       if (endArray.length > 0) {
         this.loading = true;
         forkJoin(...endArray).subscribe(res => {
+          console.log("Kolizie: ", res);
           if (res[0] != null) {
             if (res[0] == true) this.myForm.controls.room.setErrors({timeslotCollision: true});
             else this.myForm.controls.room.setErrors(null);
           }
-          if (res[1] != null && res[1] == true) {
+          if (res[1] != null) {
+            console.log("KOLIZIA");
             if (res[1] == true) this.myForm.controls.teacher.setErrors({timeslotCollision: true});
-            else this.myForm.controls.teacher.setErrors(null);
+            // else this.myForm.controls.teacher.setErrors(null);
           }
-          if (res[2] != null && res[2] == true) {
+          if (res[2] != null) {
             if (res[2] == true) this.myForm.controls.teacher.setErrors({timeslotConstraints: true});
-            else this.myForm.controls.teacher.setErrors(null);
+            // else this.myForm.controls.teacher.setErrors(null);
           }
+          if (res[1] != null && res[2] != null && res[1] == false && res[2] == false)
+            this.myForm.controls.teacher.setErrors(null);
           this.myForm.markAllAsTouched();
           this.loading = false;
         });

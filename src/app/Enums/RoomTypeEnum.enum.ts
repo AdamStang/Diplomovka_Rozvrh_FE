@@ -1,5 +1,6 @@
 export enum RoomTypeEnum {
     U = "Učebňa",
+    CP = "Počítačová miestnosť",
     L = "Laboratórium",
-    CP = "Počítačová miestnosť"
+    T = "Telocvičňa",
 }
